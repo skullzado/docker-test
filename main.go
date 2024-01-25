@@ -4,16 +4,21 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
 func main() {
+	PORT := os.Getenv("PORT")
+	if PORT == "" {
+		log.Fatal("port is not found")
+	}
 	m := http.NewServeMux()
 	corsMux := middlewareCors(m)
 
 	m.HandleFunc("/", handlePage)
 
-	const addr = ":8080"
+	addr := fmt.Sprintf(":%s", PORT)
 	srv := http.Server{
 		Handler:      corsMux,
 		Addr:         addr,
